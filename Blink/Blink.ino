@@ -22,19 +22,47 @@
   https://docs.arduino.cc/built-in-examples/basics/Blink/
 */
 
-// the setup function runs once when you press reset or power the board
-void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(10, OUTPUT);
-pinMode(9, OUTPUT);
-}
-// the loop function runs over and over again forever
-void loop() {
-  digitalWrite(10, HIGH);  // turn the LED on (HIGH is the voltage level)          
-  digitalWrite(9, LOW);   // turn the LED off by making the voltage LOW
-  delay(100);                      // wait for a second
+const int speaker = 12;
+const int led1 = 10;
+const int led2 = 9;
 
-  digitalWrite(10, LOW);  // turn the LED on (HIGH is the voltage level)                 
-  digitalWrite(9, HIGH);   // turn the LED off by making the voltage LOW
-  delay(100);                      // wait for a second
+bool mode = false;  // false = WAIL, true = YELP
+
+void setup() {
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(speaker, OUTPUT);
 }
+
+void loop() {
+
+  if (mode == false) {
+    // ===== WAIL MODE (Smooth Sweep) =====
+    for (int freq = 600; freq <= 1400; freq += 20) {
+      tone(speaker, freq);
+
+      digitalWrite(led1, HIGH);
+      digitalWrite(led2, LOW);
+      delay(10);
+    }
+
+    for (int freq = 1400; freq >= 600; freq -= 20) {
+      tone(speaker, freq);
+
+      digitalWrite(led1, LOW);
+      digitalWrite(led2, HIGH);
+      delay(10);
+    }
+
+  } else {
+    // ===== YELP MODE (Double Flash) =====
+    tone(speaker, 900);
+    digitalWrite(led1, HIGH);
+    digitalWrite(led2, LOW);
+    delay(80);
+    digitalWrite(led1, LOW);
+    delay(60);
+    digitalWrite(led1, HIGH);
+    delay(80); 
+
+
